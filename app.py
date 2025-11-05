@@ -37,9 +37,8 @@ def login_page():
 @app.route("/login", methods= ["POST"])
 def login():
     username = request.form.get("username")
-    password = request.form.get("password")
-    hashed_password = hash_password(password)
-    sucsess_logging_in = try_Logging_in(username= username , hashedpassword=hashed_password)
+    hashed_password = hash_password(request.form.get("password"))
+    sucsess_logging_in = try_Logging_in(username , hashed_password)
 
     
 
