@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Register</h2>
+        <form method="POST" action="{{ url_for('register') }}">
+            <input type="text" name="username" placeholder="Choose a username" required>
+            <input type="password" name="password" placeholder="Choose a password" required>
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- Back to Login -->
+        <div class="extra">
+            <p>Already have an account?</p>
+            <a href="{{ url_for('login_page') }}">
+                <button type="button" class="secondary-btn">Back to Login</button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
