@@ -1,21 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 from argon2 import PasswordHasher
-import sqlite3
 app = Flask(__name__)
 
-def innit_db():
-    conn = sqlite3.connect("general.db")
-    curs = conn.cursor()
-    curs.execute('''CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT UNIQUE,
-                    password_hash TEXT
-                )''')
-    conn.commit()
-    conn.close()
 
 
-innit_db()
+import sqlite3
 # ReRoutes the home page to the login page using redirect function
 @app.route("/")
 def home():
