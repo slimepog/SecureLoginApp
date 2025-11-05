@@ -53,3 +53,29 @@ button:hover {
 .secondary-btn:hover {
     background: #1976D2;
 }
+
+.flash-messages {
+    margin-bottom: 12px;
+}
+.flash {
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+/* success (green) */
+.flash-success {
+    color: #155724;
+    background: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* error (red) - keep your existing red look */
+.flash-error {
+    color: #721c24;
+    background: #f8d7da;
+    border-color: #f5c6cb;
+}
