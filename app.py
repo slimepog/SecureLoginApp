@@ -11,10 +11,12 @@ app.secret_key = secrets.token_urlsafe(32)
 database.init_db()
 
 
-# ReRoutes the home page to the login page using redirect function
+# just routes to the main page or if there is a session then it logs in
 @app.route("/")
 def home():
-    return redirect(url_for("login_page"))
+    if "username" in session:
+        return redirect("/welcome_page")
+    return redirect("/login_page")
 
 #  login page 
 # NOTES FOR LATERRRR ----->>>>> maybe make design betterr
@@ -82,6 +84,9 @@ def validate_password(password):
 # Welcome page after logging in
 @app.route("/welcome_page", methods = ["GET"])
 def welcome():
+    if "username" not in session:
+        flash("Please log in first", "error")
+        return redirect("/login_page")
     # REMEMEMEMEMEBER ---->>>>> Add a Welcome Page
     print("asd")
 
