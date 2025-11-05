@@ -5,7 +5,7 @@ import secrets
 import string
 
 
-
+# Starts the app, session, and db
 app = Flask(__name__)
 app.secret_key = secrets.token_urlsafe(32)
 database.init_db()
@@ -16,20 +16,17 @@ database.init_db()
 def home():
     return redirect(url_for("login_page"))
 
-#  displays the login page - by returning the html
+#  login page 
+# NOTES FOR LATERRRR ----->>>>> maybe make design betterr
 @app.route("/login_page")
 def login_page():
     return render_template("login.html")
 
 
-# handles login requests 
-# currently only recieves two params:
-# username - username
-# password - password
-# function logic should be as follows:
-# recive packet -> input validation and sanitization-> hash -> 
-# compare with database query -> if finds user than log in and if not then send message
+# gets login in params and verfies with the db
+# creates session if logged IN
 
+# REMEMEMEMMMMBERRRRR --->>>> create the session tokens so nobody can use IDOR to get to /welcome_page
 @app.route("/login", methods= ["POST"])
 def login():
     username = request.form.get("username")
@@ -46,19 +43,14 @@ def login():
     
     
 
-#  displays the register page - by returning the html
+# Register page
 @app.route("/register_page", methods =["GET"])
 def register_page():
     return render_template("register.html")
 
 
-# handles register requests 
-# currently only recieves two params:
-# username - username
-# password - password
-# function logic should be as follows:
-# recive packet -> validate username and password-> hash -> 
-# enter into database -> send sucsess message
+# gets the new params for the user and sends a request to the db
+# also validates password (maybe improve pass validation)
 @app.route("/register", methods=["POST"])
 def register():
 
@@ -90,10 +82,9 @@ def validate_password(password):
 # Welcome page after logging in
 @app.route("/welcome_page", methods = ["GET"])
 def welcome():
-    # Add a Welcome Page
+    # REMEMEMEMEMEBER ---->>>>> Add a Welcome Page
     print("asd")
-# password Hasher - users aragon2 algorithm 
 
-
+# ADDED THIS FOR THE JOKES (jk)
 if __name__ == "__main__":
     app.run(debug=True)
