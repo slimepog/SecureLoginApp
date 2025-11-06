@@ -6,7 +6,7 @@ db_path = "dataBases/general.db"
 
 
 # creates users db (remeber to handle permission levels)
-def init_db():
+def init_users_db():
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -22,7 +22,7 @@ def init_db():
 
 # adds users to the db
 # returns True or False based on if the username is taken or not
-def addUser(username, password):
+def add_user(username, password):
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
     cursor.execute("SELECT 1 FROM users WHERE username = ?", (username,))
@@ -38,7 +38,7 @@ def addUser(username, password):
 # basically here to validate login requests
 # returns True or False based on if the login succeeded
 # OFF COURSEE -> has to compare hashes and not plain text 
-def checkUser(username, password):
+def check_user(username, password):
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
     cursor.execute("SELECT password_hash FROM users WHERE username = ?", (username,))
@@ -60,6 +60,29 @@ def hash_password(password):
     password_hashed = ph.hash(password)
     return password_hashed   
 
+
+def init_chat_db():
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            user_message TEXT NOT NULL,
+            bot_response TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    connection.commit()
+    connection.close()
+
+def add_conversation(message, bot_response, username):   
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO conversations (username, user_message, bot_response) VALUES (?, ?, ?)",
+                    (username, message, str(bot_response)))
+    connection.commit()
+    connection.close()
 # Python stuff 
 if(__name__ == "__main__"):
     print("hello")

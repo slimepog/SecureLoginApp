@@ -15,6 +15,11 @@
             <button type="submit" class="secondary-btn">Logout</button>
         </form>
 
+        <!-- Go to Chatbot Button -->
+        <form action="{{ url_for('chat_page') }}" method="GET" style="margin-top: 10px;">
+            <button type="submit" class="secondary-btn">Go to Chatbot</button>
+        </form>
+
         <!-- Flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
