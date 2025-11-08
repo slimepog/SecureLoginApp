@@ -12,7 +12,7 @@
         <p>Logged in as: {{ username }}</p>
 
         <!-- Back to Welcome -->
-        <form action="{{ url_for('welcome') }}" method="GET" style="margin-bottom: 10px;">
+        <form action="https://127.0.0.1:5000/welcome_page" method="GET" style="margin-bottom: 10px;">
             <button type="submit" class="secondary-btn">Back to Welcome</button>
         </form>
 
@@ -49,7 +49,7 @@
             chatLog.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
 
             // Send to Flask
-            const response = await fetch('/chat', {
+            const response = await fetch('https://127.0.0.1:5000/chat', {
                 method: 'POST',
                 body: formData
             });

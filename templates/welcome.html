@@ -11,12 +11,12 @@
         <h2>Welcome, {{ username }}!</h2>
 
         <!-- Logout Button -->
-        <form action="{{ url_for('logout') }}" method="GET">
+        <form action="https://127.0.0.1:5000/logout" method="GET">
             <button type="submit" class="secondary-btn">Logout</button>
         </form>
 
         <!-- Go to Chatbot Button -->
-        <form action="{{ url_for('chat_page') }}" method="GET" style="margin-top: 10px;">
+        <form action="https://127.0.0.1:5000/chat_page" method="GET" style="margin-top: 10px;">
             <button type="submit" class="secondary-btn">Go to Chatbot</button>
         </form>
 
