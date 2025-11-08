@@ -90,23 +90,31 @@ def welcome():
     if "username" not in session:
         flash("Please log in first", "error")
         return redirect("/login_page")
-    # REMEMEMEMEMEBER ---->>>>> Add a Welcome Page
     return render_template("welcome.html")
 
 @app.route("/logout", methods = ["GET"] )
 def logout():
+    if "username" not in session:
+        flash("Please log in first", "error")
+        return redirect("/login_page")
     session.clear()
     return redirect("/login_page")
 
 
 @app.route("/chat_page",methods = ["GET"])
 def chat_page():
+    if "username" not in session:
+        flash("Please log in first", "error")
+        return redirect("/login_page")
     return render_template("chat.html")
 
 
 
 @app.route("/chat", methods=["POST"])
 def chat():
+    if "username" not in session:
+        flash("Please log in first", "error")
+        return redirect("/login_page")
     message = request.form.get("message")
     # response variable comes in as a json format of {"response": bot_response}, bot response already a string
     response = chat_bot_model.send_message_to_bot(message, chatbot, session["username"])
