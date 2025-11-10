@@ -31,7 +31,6 @@ def login_page():
 # gets login in params and verfies with the db
 # creates session if logged IN
 
-# REMEMEMEMMMMBERRRRR --->>>> create the session tokens so nobody can use IDOR to get to /welcome_page
 @app.route("/login", methods= ["POST"])
 def login():
     username = request.form.get("username")
@@ -55,7 +54,8 @@ def register_page():
 
 
 # gets the new params for the user and sends a request to the db
-# also validates password (maybe improve pass validation)
+# also validates password (maybe improve pass validation) 
+# IMPORTANT - improve pass validation
 @app.route("/register", methods=["POST"])
 def register():
 
