@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+
+<body>
+    <div class="chat-container">
+        <h2>Global Chat</h2>
+
+        <!-- Chat Messages -->
+        <div id="chat-box" class="chat-box"></div>
+
+        <!-- Message Input -->
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        const username = "{{ username }}";
+        const sender_id = {{ user_id }};  // <-- inject sender ID
+
+        socket.emit("join", { username: username });
+
+        // Send message
+        document.getElementById("send-btn").onclick = () => {
+            const content = document.getElementById("message-input").value.trim();
+            if (!content) return;
+
+            socket.emit("message", { 
+                content: content,
+                sender_id: sender_id
+            });
+
+            document.getElementById("message-input").value = "";
+        };
+
+        // Send on Enter
+        document.getElementById("message-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                document.getElementById("send-btn").click();
+            }
+        });
+
+        // System messages
+        socket.on("system", (data) => {
+            addMessage(`🟢 <i>${data.msg}</i>`);
+        });
+
+        // New chat messages
+        socket.on("chat", (data) => {
+            addMessage(`<b>${data.sender}:</b> ${data.content}`);
+        });
+
+        function addMessage(html) {
+            const box = document.getElementById("chat-box");
+            const msg = document.createElement("div");
+            msg.className = "msg";
+            msg.innerHTML = html;
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+        }
+    </script>
+
+
+
+</body>
+</html>

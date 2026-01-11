@@ -79,3 +79,39 @@ button:hover {
     background: #f8d7da;
     border-color: #f5c6cb;
 }
+.chat-container {
+    width: 400px;
+    margin: 60px auto;
+    padding: 20px;
+    background: #222;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
+    background: #111;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.msg {
+    padding: 4px 0;
+}
+
+.input-area {
+    display: flex;
+    gap: 8px;
+}
+
+#message-input {
+    flex: 1;
+    padding: 8px;
+}
+
+#send-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+}

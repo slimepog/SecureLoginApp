@@ -21,7 +21,7 @@
             {% endif %}
         {% endwith %}
 
-        <form method="POST" action="https://127.0.0.1:5000/register">
+        <form method="POST" action="{{ url_for('auth.register') }}">
             <input type="text" name="username" placeholder="Choose a username" required>
             <input type="password" name="password" placeholder="Choose a password" required>
             <button type="submit">Register</button>
@@ -30,7 +30,7 @@
         <!-- Back to Login -->
         <div class="extra">
             <p>Already have an account?</p>
-            <a href="https://127.0.0.1:5000/login">
+            <a href="/login_page">
                 <button type="button" class="secondary-btn">Back to Login</button>
             </a>
         </div>
