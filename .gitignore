@@ -1,37 +1,38 @@
-# Python bytecode / cache
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
+*.pyd
 
-# Virtualenv / venv folders
+# Virtual environments
 venv/
-ENV/
 env/
-.venv/
-venv.bak/
 
 # Databases
 *.db
-*.sqlite
-*.sqlite3
-db.sqlite3
-*.db-journal
-databases/general.db
 
-# Flask / instance / config
-instance/
-*.env
+# SSL certificates
+certs/
+*.pem
+*.key
 
-# SSL certs (if present locally)
-cert.pem
-key.pem
-
-# IDEs / editors
+# IDE
 .vscode/
 .idea/
-*.sublime-workspace
-*.sublime-project
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
+
+# Additional ignores for Python/Flask projects
+.env
+.venv
+ENV/
+instance/
+.webassets-cache
+*.log
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints
+src/static/build/
+src/templates/__pycache__/
