@@ -1,6 +1,8 @@
 import exceptions
 
-
+# validates password - custom rules
+# rules:
+# longer than 7 chars, must have a digit, and spcial char, and not ilegal chars
 def validate_password(password):
     if len(password) < 8:
         raise exceptions.PasswordTooShort()
@@ -14,14 +16,17 @@ def validate_password(password):
         raise exceptions.IlegalCharacterInPassword()
     return True
 
-
+# validates username - custom rules
+# rules:
+# longer than 3 chars, no ilegal chars in it
 def validate_username(username):
     if len(username) < 4:
         raise exceptions.UsernameTooShort()
     if any(char in """"'(),/:;<=>""" for char in username):
         raise exceptions.IlegalCharacterInUsername()
     return True
-    
+
+# validates content - checks if isnt empty 
 def validate_content(content):
     if not content:
         raise exceptions.EmptyMessage()
