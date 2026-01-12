@@ -1,10 +1,10 @@
 from flask import session, redirect, url_for
 from secrets import token_hex
-from models.user import save_user_session_uuid, get_user_by_id, clear_user_session_uuid
+from models.user import save_user_session_uuid, get_user_by_id, clear_user_session_uuid, get_user_by_username
 from functools import wraps
 
-def start_user_session(user_row):
-
+def start_user_session(username):
+    user_row = get_user_by_username(username)
     session_uuid = token_hex(16)
 
     session['user_id'] = user_row['id']
