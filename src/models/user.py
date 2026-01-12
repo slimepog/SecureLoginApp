@@ -70,5 +70,23 @@ def user_exists(username):
     cursor.close()
     conn.close()
     if user is None:
-         return False
+        return False
     return True
+
+
+
+def save_user_session_uuid(id, session_uuid):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET active_session_uuid = ? WHERE id = ?", (session_uuid ,id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def clear_user_session_uuid(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET active_session_uuid = NULL WHERE id = ?", (id, ))
+    conn.commit()
+    cursor.close()
+    conn.close()

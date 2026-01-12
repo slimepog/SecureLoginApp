@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, session, render_template
-
-
+from utils.sessions import is_authenticated, require_single_session
 main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
+@require_single_session   
 def home():
-    if "username" in session:
+    if is_authenticated():
         return redirect("/welcome_page")
     return redirect("/login_page")
 
@@ -22,9 +22,11 @@ def register_page():
 
 # Welcome page after logging in
 @main_bp.route("/welcome_page", methods = ["GET"])
+@require_single_session   
 def welcome_page():
     return render_template("welcome.html")
 
 @main_bp.route("/chat_page", methods= ["GET"])
+@require_single_session   
 def chat_page():
     return render_template("chat.html", username=session["username"], user_id=session["user_id"])

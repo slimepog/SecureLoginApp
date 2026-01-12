@@ -21,7 +21,7 @@ def init_users_db():
         password_hash TEXT NOT NULL,
         password_salt TEXT NOT NULL,
         created_at TEXT NOT NULL DEFAULT (datetime('now')),
-        is_active INTEGER NOT NULL DEFAULT 1,
+        active_session_uuid TEXT,
         permission_level INTEGER NOT NULL DEFAULT 1
     )''')
     connection.commit()

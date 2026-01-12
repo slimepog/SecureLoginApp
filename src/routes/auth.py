@@ -1,8 +1,8 @@
-from flask import Blueprint, request, session, jsonify, flash, redirect
+from flask import Blueprint, request, session, jsonify, flash, redirect, url_for
 from utils.crypto import hash_password, verify_password
-from  exceptions import *
+from exceptions import *
 from utils.validators import validate_password, validate_username
-from models.user import create_user, check_user, get_user_by_username, user_exists
+from models.user import create_user, check_user, get_user_by_username, user_exists, get_user_by_id
 from utils.sessions import *
 auth_bp = Blueprint("auth", __name__, url_prefix="auth")
 
@@ -49,11 +49,11 @@ def login():
         flash(str(e),"error")
         return redirect("/login_page")
 
-   
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
     end_user_session()
     return redirect("/login_page")
+
 
 
     
