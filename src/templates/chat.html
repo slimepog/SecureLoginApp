@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
     <div class="chat-container">
         <h2>Global Chat</h2>
 
@@ -26,7 +27,7 @@
         const socket = io();
 
         const username = "{{ username }}";
-        const sender_id = {{ user_id }};  // <-- inject sender ID
+        const sender_id = "{{ user_id }}";
 
         socket.emit("join", { username: username });
 
@@ -43,9 +44,10 @@
             document.getElementById("message-input").value = "";
         };
 
-        // Send on Enter
+        // Enter key to send
         document.getElementById("message-input").addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
+                e.preventDefault();
                 document.getElementById("send-btn").click();
             }
         });
@@ -55,7 +57,7 @@
             addMessage(`🟢 <i>${data.msg}</i>`);
         });
 
-        // New chat messages
+        // Chat messages
         socket.on("chat", (data) => {
             addMessage(`<b>${data.sender}:</b> ${data.content}`);
         });
@@ -69,8 +71,6 @@
             box.scrollTop = box.scrollHeight;
         }
     </script>
-
-
 
 </body>
 </html>

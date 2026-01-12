@@ -7,6 +7,8 @@ body {
     height: 100vh;
     margin: 0;
 }
+
+/* Login Container */
 .login-container {
     background: #fff;
     padding: 2rem;
@@ -14,10 +16,12 @@ body {
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     width: 300px;
 }
+
 h2 {
     text-align: center;
     margin-bottom: 1.5rem;
 }
+
 input[type="text"],
 input[type="password"] {
     width: 100%;
@@ -27,6 +31,7 @@ input[type="password"] {
     border-radius: 8px;
     box-sizing: border-box;
 }
+
 button {
     width: 100%;
     padding: 10px;
@@ -38,25 +43,26 @@ button {
     cursor: pointer;
     margin-top: 10px;
 }
+
 button:hover {
     background: #45a049;
 }
-.extra {
-    text-align: center;
-    margin-top: 15px;
-}
 
+/* Secondary Button */
 .secondary-btn {
     background: #2196F3;
     margin-top: 8px;
 }
+
 .secondary-btn:hover {
     background: #1976D2;
 }
 
+/* Flash messages */
 .flash-messages {
     margin-bottom: 12px;
 }
+
 .flash {
     padding: 8px 10px;
     border-radius: 8px;
@@ -66,21 +72,21 @@ button:hover {
     border: 1px solid transparent;
 }
 
-/* success (green) */
 .flash-success {
     color: #155724;
     background: #d4edda;
     border-color: #c3e6cb;
 }
 
-/* error (red) - keep your existing red look */
 .flash-error {
     color: #721c24;
     background: #f8d7da;
     border-color: #f5c6cb;
 }
+
+/* Chat Container */
 .chat-container {
-    width: 400px;
+    width: 420px;
     margin: 60px auto;
     padding: 20px;
     background: #222;
@@ -101,17 +107,37 @@ button:hover {
     padding: 4px 0;
 }
 
+/* Input area */
 .input-area {
     display: flex;
     gap: 8px;
 }
 
+/* Wider message box */
 #message-input {
-    flex: 1;
-    padding: 8px;
+    flex: 4;                /* bigger width */
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #111;
+    color: white;
+    height: 38px;
+    overflow-y: auto;        /* scrolling inside */
+    font-size: 14px;
 }
 
+/* Thinner send button */
 #send-btn {
-    padding: 10px 20px;
+    flex: 1;                /* narrower */
+    padding: 10px;
     cursor: pointer;
+    border-radius: 8px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 14px;
+}
+
+#send-btn:hover {
+    background: #45a049;
 }
