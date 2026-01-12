@@ -1,5 +1,6 @@
 import os
 
+# config
 class Config:
     SECRET_KEY = os.urandom(32)
     DB_PATH = "data/general.db"
