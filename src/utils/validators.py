@@ -12,7 +12,7 @@ def validate_password(password):
         raise exceptions.NoSpecialCharacterInPassword()
     if not any(char.isupper() for char in password):
         raise exceptions.NoUppercaseInPassword()
-    if any(char in """"'(),/:;<=>""" for char in password):
+    if any(char in """"'(),/:;<=> """ for char in password):
         raise exceptions.IlegalCharacterInPassword()
     return True
 
@@ -22,7 +22,7 @@ def validate_password(password):
 def validate_username(username):
     if len(username) < 4:
         raise exceptions.UsernameTooShort()
-    if any(char in """"'(),/:;<=>""" for char in username):
+    if any(char in """"'(),/:;<=> """ for char in username):
         raise exceptions.IlegalCharacterInUsername()
     return True
 
