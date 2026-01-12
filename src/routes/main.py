@@ -1,7 +1,11 @@
 from flask import Blueprint, redirect, session, render_template
 from utils.sessions import is_authenticated, require_single_session
+
+# sets the bp for all main routes
 main_bp = Blueprint("main", __name__)
 
+
+# redirects based on if sessions is active ot not
 @main_bp.route("/")
 @require_single_session   
 def home():
@@ -26,6 +30,7 @@ def register_page():
 def welcome_page():
     return render_template("welcome.html")
 
+# Chat page
 @main_bp.route("/chat_page", methods= ["GET"])
 @require_single_session   
 def chat_page():
