@@ -3,9 +3,12 @@ from secrets import token_hex
 from models.user import save_user_session_uuid, get_user_by_id, clear_user_session_uuid, get_user_by_username
 from functools import wraps
 
+# starts the users session
+# session holds 4 params
+# user_id, username, logged_in, session_uuid
 def start_user_session(username):
     user_row = get_user_by_username(username)
-    session_uuid = token_hex(16)
+    session_uuid = token_hex(16) # generates random uuid
 
     session['user_id'] = user_row['id']
     session['username'] = user_row['username']  
@@ -14,18 +17,19 @@ def start_user_session(username):
 
     session["session_uuid"] = session_uuid
 
-    save_user_session_uuid(user_row["id"], session_uuid)
+    save_user_session_uuid(user_row["id"], session_uuid) # overwrites uuid in db
 
+# ends users sesions
 def end_user_session():
     user_id = session["user_id"]
     clear_user_session_uuid(user_id)
     session.clear()
 
-
+# returns based on if user is authenticated
 def is_authenticated():
     return session.get('logged_in', False)
 
-
+# decorator that checks if a users session exists and sends to login page if it doesnt
 def require_single_session(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
