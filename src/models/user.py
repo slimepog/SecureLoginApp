@@ -27,7 +27,7 @@ def create_user(username, password):
 
 
 
-# returns the user sqlite3 row 
+# gets user by username (return sqlite 3 row obj)
 def get_user_by_username(username):
     conn = get_db()
     user_row = conn.execute(
@@ -38,7 +38,7 @@ def get_user_by_username(username):
     return user_row
 
 
-
+# gets user by id (return sqlite 3 row obj)
 def get_user_by_id(user_id):
     connection = get_db()
     user_row = connection.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
@@ -46,8 +46,8 @@ def get_user_by_id(user_id):
     return user_row
 
 # basically here to validate login requests
-# returns True or False based on if the login succeeded
-# OFF COURSEE -> has to compare hashes and not plain text 
+# compares hashes and request username
+# raises exceptions based on the result
 def check_user(username, password):
     connection = get_db()
     cursor = connection.cursor()
@@ -61,7 +61,7 @@ def check_user(username, password):
     if not verify_password(password, user['password_salt'], user['password_hash']):
         raise WrongPassword()
 
-
+# check if user exists
 def user_exists(username):
     conn = get_db()
     cursor = conn.cursor()
@@ -74,7 +74,7 @@ def user_exists(username):
     return True
 
 
-
+# updates the users new uuid
 def save_user_session_uuid(id, session_uuid):
     conn = get_db()
     cursor = conn.cursor()
@@ -83,6 +83,8 @@ def save_user_session_uuid(id, session_uuid):
     cursor.close()
     conn.close()
 
+
+# clears the users uuid (usually on logout)
 def clear_user_session_uuid(id):
     conn = get_db()
     cursor = conn.cursor()
