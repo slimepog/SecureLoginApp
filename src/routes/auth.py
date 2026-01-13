@@ -4,7 +4,7 @@ from exceptions import *
 from utils.validators import validate_password, validate_username
 from models.user import create_user, check_user, get_user_by_username, user_exists, get_user_by_id
 from utils.sessions import *
-
+from routes.chat import online_users, force_user_logout
 # sets the bp for all auth routes
 auth_bp = Blueprint("auth", __name__, url_prefix="auth")
 
@@ -39,6 +39,11 @@ def login():
     password = request.form.get("password")
     try:
         check_user(username, password) # validates the credentials
+
+
+        old_sid = online_users.get(username) # checks if session exists and force_logs_out
+        if old_sid:
+            force_user_logout(username)
         start_user_session(username) # starts the users session
         return redirect("/welcome_page")
     except Exception as e:

@@ -10,36 +10,38 @@ from utils.sessions import require_single_session
 chat_bp = Blueprint("messages", __name__)
 
 
-# keeps track of online suers
+# keeps track of online users
+# format - key: username, value: sid
 online_users = {}
 
 # handles initial connection to the socket
 @sockio.on("connect")
-@require_single_session   
 def handle_connect():
     print("Connection established baby", request.sid)
 
 # handles socket closing + removes user from online users
 @sockio.on("disconnect")
-@require_single_session   
 def handle_disconnect():
     sid = request.sid
-    username = online_users.pop(sid, None)
+    username = None
+    for key, value in online_users.items(): # finds the username in dict
+        if value == sid:
+            username = key
+            break
+    
     print("Brudda disconnected", sid, username)
 
 # handles joining the chat
 @sockio.on("join")
-@require_single_session   
 def handle_join(data):
 
     username = data.get("username")
-    online_users[request.sid] = username
+    online_users[username] = request.sid
 
     emit("system", {"msg": f"{username} joined the chat"}, broadcast=True)  
 
 # handles messages (in main chat - I think)
 @sockio.on("message")
-@require_single_session   
 def handle_message(data):
 
     try: 
@@ -56,9 +58,12 @@ def handle_message(data):
 
 # handles private messages - (not in use now)
 @sockio.on("private_message")
-@require_single_session   
 def handle_pm(data):
     target = data.get("to")
     emit("private_chat", data, room=target)
 
-   
+# forces logout (triggers frontend)
+def force_user_logout(username):
+    sid = online_users.get(username)
+    if sid:
+        sockio.emit("force_logout", room=sid)

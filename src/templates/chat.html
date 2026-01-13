@@ -61,6 +61,10 @@
         socket.on("chat", (data) => {
             addMessage(`<b>${data.sender}:</b> ${data.content}`);
         });
+        // force logout
+        socket.on("force_logout", () => {
+            window.location.href = "/login_page";
+        });
 
         function addMessage(html) {
             const box = document.getElementById("chat-box");
