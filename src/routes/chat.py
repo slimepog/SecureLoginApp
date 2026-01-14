@@ -17,7 +17,7 @@ online_users = {}
 # handles initial connection to the socket
 @sockio.on("connect")
 def handle_connect():
-    print("Connection established baby", request.sid)
+    print("Connection established: ", request.sid)
 
 # handles socket closing + removes user from online users
 @sockio.on("disconnect")
@@ -28,8 +28,10 @@ def handle_disconnect():
         if value == sid:
             username = key
             break
+
+    emit("system", {"msg": f"🔴 {username} left the chat"}, broadcast=True)
     
-    print("Brudda disconnected", sid, username)
+    print(f"Username: {username}, sid: {sid} disconnected")
 
 # handles joining the chat
 @sockio.on("join")
@@ -38,7 +40,7 @@ def handle_join(data):
     username = data.get("username")
     online_users[username] = request.sid
 
-    emit("system", {"msg": f"{username} joined the chat"}, broadcast=True)  
+    emit("system", {"msg": f"🟢 {username} joined the chat"}, broadcast=True)  
 
 # handles messages (in main chat - I think)
 @sockio.on("message")
