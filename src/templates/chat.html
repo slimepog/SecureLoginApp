@@ -11,6 +11,10 @@
 <body>
 
     <div class="chat-container">
+
+        <!-- BACK BUTTON -->
+        <a href="/welcome_page" class="back-btn">← Back</a>
+
         <h2>Global Chat</h2>
 
         <!-- Chat Messages -->
@@ -21,7 +25,9 @@
             <input type="text" id="message-input" placeholder="Type your message...">
             <button id="send-btn">Send</button>
         </div>
+
     </div>
+
 
     <script>
         const socket = io();
@@ -31,7 +37,6 @@
 
         socket.emit("join", { username: username });
 
-        // Send message
         document.getElementById("send-btn").onclick = () => {
             const content = document.getElementById("message-input").value.trim();
             if (!content) return;
@@ -44,7 +49,6 @@
             document.getElementById("message-input").value = "";
         };
 
-        // Enter key to send
         document.getElementById("message-input").addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
@@ -52,16 +56,14 @@
             }
         });
 
-        // System messages (join and disconnect)
         socket.on("system", (data) => {
             addMessage(`<i>${data.msg}</i>`);
         });
 
-        // Chat messages
         socket.on("chat", (data) => {
             addMessage(`<b>${data.sender}:</b> ${data.content}`);
         });
-        // force logout
+
         socket.on("force_logout", () => {
             window.location.href = "/login_page";
         });
