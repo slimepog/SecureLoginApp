@@ -10,7 +10,7 @@
     <div class="login-container">
         <h2>Login</h2>
 
-        <!-- Flash messages (categorized inline only) -->
+        <!-- messages based on the error type in backend -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
@@ -27,7 +27,7 @@
             <button type="submit">Log In</button>
         </form>
 
-        <!-- Register redirect -->
+        <!-- send to register page -->
         <div class="extra">
             <p>Don't have an account?</p>
             <a href="/register_page">

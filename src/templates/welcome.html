@@ -10,17 +10,17 @@
     <div class="login-container">
         <h2>Welcome, {{ username }}!</h2>
 
-        <!-- Logout Button -->
+        <!-- logs u out -->
         <form action="{{ url_for('auth.logout') }}" method="POST">
             <button type="submit" class="secondary-btn">Logout</button>
         </form>
 
-        <!-- Go to Chatbot Button -->
+        <!-- go to chat -->
         <form action="/chat_page" method="GET" style="margin-top: 10px;">
             <button type="submit" class="secondary-btn">Main Chat</button>
         </form>
 
-        <!-- Flash messages -->
+        <!-- messages based on the error type in backend -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
