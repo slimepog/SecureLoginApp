@@ -2,6 +2,7 @@ from flask import Flask, render_template,redirect, session, request
 from flask_socketio import SocketIO
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_wtf.csrf import CSRFProtect
 import secrets
 from config import Config
 import os
@@ -17,6 +18,7 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
+csrf = CSRFProtect()
 # Initializes the app
 def create_app():
 
@@ -35,6 +37,7 @@ def create_app():
 
     Talisman(
         app,
+        referrer_policy='strict-origin-when-cross-origin',
         content_security_policy=csp,
         content_security_policy_nonce_in=['script-src']
     )
@@ -43,6 +46,7 @@ def create_app():
     app.secret_key = Config.SECRET_KEY # sets key
     
     limiter.init_app(app)
+    csrf.init_app(app) # enables CSRF protection
 
     from utils.database import init_users_db, init_messages_db # starts users and messages db
     init_users_db()

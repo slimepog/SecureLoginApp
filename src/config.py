@@ -6,3 +6,4 @@ class Config:
     DB_PATH = "../data/general.db"
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "Strict"
