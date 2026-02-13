@@ -28,6 +28,7 @@ def create_app():
     'script-src': [
         "'self'",
         "https://cdn.socket.io",
+        "https://cdn.socket.io/4.7.5/socket.io.min.js.map",
         # nonce will be injected automatically by Talisman
     ],
     'style-src': ["'self'"],
