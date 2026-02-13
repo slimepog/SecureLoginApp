@@ -46,7 +46,7 @@ def create_app():
     
     app.secret_key = Config.SECRET_KEY # sets key
     
-    limiter.init_app(app)
+    limiter.init_app(app) #enforces the rate limmiting
     csrf.init_app(app) # enables CSRF protection
 
     from utils.database import init_users_db, init_messages_db # starts users and messages db
