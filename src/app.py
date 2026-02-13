@@ -20,7 +20,7 @@ sockio = SocketIO()
 #  init rate limiter
 limiter = Limiter(
     key_func=get_remote_address, 
-    default_limits=["200 per day", "50 per hour"],
+    default_limits=Config.DEFAULT_RATE_LIMIT.split(", "),
     storage_uri="memory://" #stores the current limit stats for each user on the python processes ram
 )
 
@@ -34,33 +34,20 @@ def create_app():
 
     app = Flask(__name__)
 
-    # ----NOTE----
-    # fix the console error regarding socketio script
-    # ----NOTE----
+
     
-    # csp configuration
-    csp = {
-    'default-src': "'self'",
-    'script-src': [
-        "'self'",
-        "https://cdn.socket.io/4.7.5/socket.io.min.js",
-    ],
-    'connect-src': ["'self'", "https://cdn.socket.io"],  # for websocks
-    'style-src': ["'self'"],
-    'img-src': ["'self'", "data:"],
-    'object-src': "'none'",
-    }
+    
 
     Talisman(
         app,
         # hsts headers
-        force_https=True,  
+        force_https= Config.FORCE_HTTPS,  
         strict_transport_security=True,
-        strict_transport_security_max_age=31536000, # 1 year
-        strict_transport_security_include_subdomains=True,
+        strict_transport_security_max_age=Config.HSTS_MAX_AGE,
+        strict_transport_security_include_subdomains= Config.HSTS_INCLUDE_SUBDOMAINS,
         # csp and csrf protocls
-        referrer_policy='strict-origin-when-cross-origin', 
-        content_security_policy=csp,
+        referrer_policy= Config.REFERRER_POLICY, 
+        content_security_policy= Config.CSP_POLICY,
         content_security_policy_nonce_in=['script-src']
     )
 
@@ -97,4 +84,4 @@ if __name__ == "__main__":
         os.path.join(base_dir, "../certs/key.pem")
     )
     # i need to turn ssl_context=certs
-    sockio.run(app, host="127.0.0.1", port=5000, debug=True, ssl_context=certs)
+    sockio.run(app, host="127.0.0.1", port=5000, debug= Config.DEBUG, ssl_context=certs)

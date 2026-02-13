@@ -3,17 +3,18 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.exceptions import InvalidKey
 import os, base64
+from config import Config
 
 # hashes password with salt
 def hash_password(password: str) -> tuple[str,str]:
-    salt = os.urandom(16)
+    salt = os.urandom(Config.PASSWORD_HASH_SALT_LENGTH)
     # uses PBKDF2-HMAC which repeatedly applies the same hash function with a salt
     # to create a more secure hash
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
-        length=32,
+        length=Config.PASSWORD_HASH_LENGTH,
         salt=salt,
-        iterations=300_000,
+        iterations=Config.PASSWORD_HASH_ITERATIONS,
         backend=default_backend()
     )
     # derives the key
@@ -28,9 +29,9 @@ def verify_password(password: str, salt_b64: str, hash_b64: str) -> bool:
     stored_key = base64.b64decode(hash_b64)
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
-        length=32,
+        length=Config.PASSWORD_HASH_LENGTH,
         salt=salt,
-        iterations=300_000,
+        iterations=Config.PASSWORD_HASH_ITERATIONS,
         backend=default_backend()
     )
     

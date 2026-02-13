@@ -1,10 +1,11 @@
 import exceptions
+from config import Config
 
 # validates password - custom rules
 # rules:
-# longer than 7 chars, must have a digit, and spcial char, and not ilegal chars
+# longer than min chars, must have a digit, and spcial char, and not ilegal chars
 def validate_password(password):
-    if len(password) < 8:
+    if len(password) < Config.PASSWORD_MIN_LENGTH:
         raise exceptions.PasswordTooShort()
     if not any(char.isdigit() for char in password):
         raise exceptions.NoDigitInPassword()
@@ -20,7 +21,7 @@ def validate_password(password):
 # rules:
 # longer than 3 chars, no ilegal chars in it
 def validate_username(username):
-    if len(username) < 4:
+    if len(username) < Config.USERNAME_MIN_LENGTH:
         raise exceptions.UsernameTooShort()
     if any(char in """"'(),/:;<=> """ for char in username):
         raise exceptions.IlegalCharacterInUsername()
