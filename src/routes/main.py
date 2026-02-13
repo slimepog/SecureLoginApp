@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, session, render_template
 from utils.sessions import is_authenticated, require_single_session
+from app import limiter
 
 # sets the bp for all main routes
 main_bp = Blueprint("main", __name__)
@@ -16,11 +17,13 @@ def home():
 #  login page 
 # NOTES FOR LATERRRR ----->>>>> maybe make design betterr
 @main_bp.route("/login_page")
+@limiter.limit("30 per hour")
 def login_page():
     return render_template("login.html")
 
 # Register page
 @main_bp.route("/register_page", methods =["GET"])
+@limiter.limit("30 per hour")
 def register_page():
     return render_template("register.html")
 

@@ -1,5 +1,7 @@
-from flask import Flask, render_template,redirect, session
+from flask import Flask, render_template,redirect, session, request
 from flask_socketio import SocketIO
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import secrets
 from config import Config
 import os
@@ -7,6 +9,13 @@ from flask_talisman import Talisman
 
 # creates SocketIO object
 sockio = SocketIO()
+
+# creates Limiter for rate limiting
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 # Initializes the app
 def create_app():
@@ -32,6 +41,8 @@ def create_app():
 
     
     app.secret_key = Config.SECRET_KEY # sets key
+    
+    limiter.init_app(app)
 
     from utils.database import init_users_db, init_messages_db # starts users and messages db
     init_users_db()

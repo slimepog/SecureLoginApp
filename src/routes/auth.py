@@ -5,6 +5,8 @@ from utils.validators import validate_password, validate_username
 from models.user import create_user, check_user, get_user_by_username, user_exists, get_user_by_id
 from utils.sessions import *
 from routes.chat import online_users, force_user_logout
+from app import limiter
+
 # sets the bp for all auth routes
 auth_bp = Blueprint("auth", __name__, url_prefix="auth")
 
@@ -14,6 +16,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="auth")
 
 # handles register requests
 @auth_bp.route("/register", methods=["POST"])
+@limiter.limit("5 per hour")
 def register():
     new_username = request.form.get("username")
     new_password = request.form.get("password")
@@ -34,6 +37,7 @@ def register():
 
 # handles login requests
 @auth_bp.route("/login", methods= ["POST"])
+@limiter.limit("10 per hour")
 def login():
     username = request.form.get("username")
     password = request.form.get("password")

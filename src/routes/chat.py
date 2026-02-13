@@ -1,6 +1,6 @@
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import session, Blueprint, flash, request, session
-from app import sockio
+from app import sockio, limiter
 from models.message import send_message
 from utils.validators import validate_content
 from models.user import get_user_by_id
