@@ -35,7 +35,7 @@
         const username = "{{ username }}";
         const sender_id = "{{ user_id }}";
 
-        socket.emit("join", { username: username });
+        socket.emit("join", {});
 
         document.getElementById("send-btn").onclick = () => {
             const content = document.getElementById("message-input").value.trim();
@@ -71,7 +71,7 @@
             const box = document.getElementById("chat-box");
             const msg = document.createElement("div");
             msg.className = "msg";
-            msg.textContent = html;;
+            msg.innerHTML = html;
             box.appendChild(msg);
             box.scrollTop = box.scrollHeight;
         }

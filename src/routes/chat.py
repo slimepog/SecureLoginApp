@@ -1,5 +1,6 @@
 from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
 from flask import session, Blueprint, flash, request
+from markupsafe import escape
 from app import sockio, limiter
 from models.message import send_message
 from utils.validators import validate_content
@@ -29,7 +30,9 @@ def handle_disconnect():
             username = key
             break
 
-    emit("system", {"msg": f"🔴 {username} left the chat"}, broadcast=True)
+    if username:
+        escaped_username = escape(username)
+        emit("system", {"msg": f"🔴 {escaped_username} left the chat"}, broadcast=True)
     
     print(f"Username: {username}, sid: {sid} disconnected")
 
@@ -39,8 +42,8 @@ def handle_disconnect():
 def handle_join(data=None):
     username = session.get("username")
     online_users[username] = request.sid
-
-    emit("system", {"msg": f"🟢 {username} joined the chat"}, broadcast=True)  
+    escaped_username = escape(username)
+    emit("system", {"msg": f"🟢 {escaped_username} joined the chat"}, broadcast=True)  
 
 # handles messages (in main chat - I think)
 @sockio.on("message")
@@ -59,7 +62,9 @@ def handle_message(data):
     sender = get_user_by_id(sender_id)
 
     sender_username = sender["username"]
-    data_sent = {"sender": sender_username,    "content": data['content']}
+    # Escape the content to prevent XSS attacks
+    escaped_content = escape(data['content'])
+    data_sent = {"sender": sender_username, "content": escaped_content}
     emit("chat", data_sent, broadcast=True)
 
 # handles private messages - (not in use now)
