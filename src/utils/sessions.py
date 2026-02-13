@@ -30,30 +30,32 @@ def end_user_session():
 def is_authenticated():
     return session.get('logged_in', False)
 
-# helper function to check if socket user is authenticated
+# returns based on if user is authenticated (helper func for decorator)
 def is_socket_authenticated():
+    # params
     user_id = session.get("user_id")
     session_uuid = session.get("session_uuid")
     logged_in = session.get("logged_in", False)
     
+    # checks
     if not user_id or not session_uuid or not logged_in:
         return False
-    
     user = get_user_by_id(user_id)
     if not user or session_uuid != user["active_session_uuid"]:
         return False
     
     return True
 
-# helper function to handle unauthorized socket access
+# kicks unauthorized users (helper func for decorator)
 def handle_socket_unauthorized():
     end_user_session()
     emit("force_logout")
 
-# decorator to require socket authentication
+# socket authentication decorator 
 def socket_authenticated(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
+        # auth check
         if not is_socket_authenticated():
             handle_socket_unauthorized()
             return
