@@ -2,6 +2,7 @@ from flask import Flask, render_template,redirect, session
 from flask_socketio import SocketIO
 import secrets
 from config import Config
+import os
 
 # creates SocketIO object
 sockio = SocketIO()
@@ -34,3 +35,11 @@ if __name__ == "__main__":
     from app import create_app, sockio
     app = create_app()
     sockio.run(app, host="127.0.0.1", port=5000, debug=True)
+    # off for now until i fix https issue
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    certs = (
+        os.path.join(base_dir, "../certs/cert.pem"),
+        os.path.join(base_dir, "../certs/key.pem")
+    )
+    # i need to turn ssl_context=certs
+    sockio.run(app, host="127.0.0.1", port=5000, debug=True, ssl_context=certs)
