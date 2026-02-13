@@ -36,4 +36,4 @@ instance/
 .ipynb_checkpoints
 src/static/build/
 src/templates/__pycache__/
-notes
+.notes
