@@ -8,29 +8,44 @@ from config import Config
 import os
 from flask_talisman import Talisman
 
-# creates SocketIO object
+# creates socketio object
 sockio = SocketIO()
 
-# creates Limiter for rate limiting
+
+# -----NOTE-----
+# ADD MORE LIMITS / SET DEFAULT LIMITS ----> UPDATE IN ROUTES
+# ----NOTE------
+
+
+#  init rate limiter
 limiter = Limiter(
-    key_func=get_remote_address,
+    key_func=get_remote_address, 
     default_limits=["200 per day", "50 per hour"],
-    storage_uri="memory://"
+    storage_uri="memory://" #stores the current limit stats for each user on the python processes ram
 )
 
-csrf = CSRFProtect()
-# Initializes the app
+
+# init csrf token object
+csrf= CSRFProtect() 
+
+# init app
 def create_app():
 
+
     app = Flask(__name__)
+
+    # ----NOTE----
+    # fix the console error regarding socketio script
+    # ----NOTE----
+    
+    # csp configuration
     csp = {
     'default-src': "'self'",
     'script-src': [
         "'self'",
         "https://cdn.socket.io/4.7.5/socket.io.min.js",
-        # nonce will be injected automatically by Talisman
     ],
-    'connect-src': ["'self'", "https://cdn.socket.io"],  # allows websocket + source maps
+    'connect-src': ["'self'", "https://cdn.socket.io"],  # for websocks
     'style-src': ["'self'"],
     'img-src': ["'self'", "data:"],
     'object-src': "'none'",
@@ -38,11 +53,13 @@ def create_app():
 
     Talisman(
         app,
-        force_https=True,  # Redirect HTTP to HTTPS
+        # hsts headers
+        force_https=True,  
         strict_transport_security=True,
-        strict_transport_security_max_age=31536000,  # 1 year
+        strict_transport_security_max_age=31536000, # 1 year
         strict_transport_security_include_subdomains=True,
-        referrer_policy='strict-origin-when-cross-origin',
+        # csp and csrf protocls
+        referrer_policy='strict-origin-when-cross-origin', 
         content_security_policy=csp,
         content_security_policy_nonce_in=['script-src']
     )
@@ -50,8 +67,8 @@ def create_app():
     
     app.secret_key = Config.SECRET_KEY # sets key
     
-    limiter.init_app(app) #enforces the rate limmiting
-    csrf.init_app(app) # enables CSRF protection
+    limiter.init_app(app) # enforces the rate limmiting
+    csrf.init_app(app) # enforces csrf protection
 
     from utils.database import init_users_db, init_messages_db # starts users and messages db
     init_users_db()
