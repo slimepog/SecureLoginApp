@@ -3,13 +3,32 @@ from flask_socketio import SocketIO
 import secrets
 from config import Config
 import os
+from flask_talisman import Talisman
 
 # creates SocketIO object
 sockio = SocketIO()
 
 # Initializes the app
 def create_app():
+
     app = Flask(__name__)
+    csp = {
+    'default-src': "'self'",
+    'script-src': [
+        "'self'",
+        "https://cdn.socket.io",
+        # nonce will be injected automatically by Talisman
+    ],
+    'style-src': ["'self'"],
+    'img-src': ["'self'", "data:"],
+    'object-src': "'none'",
+    }
+
+    Talisman(
+        app,
+        content_security_policy=csp,
+        content_security_policy_nonce_in=['script-src']
+    )
 
     
     app.secret_key = Config.SECRET_KEY # sets key
@@ -34,7 +53,6 @@ def create_app():
 if __name__ == "__main__":
     from app import create_app, sockio
     app = create_app()
-    sockio.run(app, host="127.0.0.1", port=5000, debug=True)
     # off for now until i fix https issue
     base_dir = os.path.dirname(os.path.abspath(__file__))
     certs = (

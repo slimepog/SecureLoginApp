@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script nonce="{{ csp_nonce() }}" src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
     </div>
 
 
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         const socket = io();
 
         const username = "{{ username }}";
@@ -72,7 +72,7 @@
             const box = document.getElementById("chat-box");
             const msg = document.createElement("div");
             msg.className = "msg";
-            msg.innerHTML = html;
+            msg.textContent = html;;
             box.appendChild(msg);
             box.scrollTop = box.scrollHeight;
         }
