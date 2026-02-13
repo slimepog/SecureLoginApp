@@ -22,8 +22,9 @@ def start_user_session(username):
 
 # ends users sesions
 def end_user_session():
-    user_id = session["user_id"]
-    clear_user_session_uuid(user_id)
+    user_id = session.get("user_id")
+    if user_id:
+        clear_user_session_uuid(user_id)
     session.clear()
 
 # returns based on if user is authenticated
@@ -48,7 +49,8 @@ def is_socket_authenticated():
 
 # kicks unauthorized users (helper func for decorator)
 def handle_socket_unauthorized():
-    end_user_session()
+    if session.get("user_id"):
+        end_user_session()
     emit("force_logout")
 
 # socket authentication decorator 

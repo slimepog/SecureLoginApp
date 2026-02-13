@@ -16,7 +16,6 @@ online_users = {}
 
 # handles initial connection to the socket
 @sockio.on("connect")
-@socket_authenticated
 def handle_connect(data=None):
     print("Connection established: ", request.sid)
 
