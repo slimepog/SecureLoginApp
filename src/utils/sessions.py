@@ -1,4 +1,5 @@
 from flask import session, redirect, url_for
+from flask_socketio import emit
 from secrets import token_hex
 from models.user import save_user_session_uuid, get_user_by_id, clear_user_session_uuid, get_user_by_username
 from functools import wraps
@@ -28,6 +29,36 @@ def end_user_session():
 # returns based on if user is authenticated
 def is_authenticated():
     return session.get('logged_in', False)
+
+# helper function to check if socket user is authenticated
+def is_socket_authenticated():
+    user_id = session.get("user_id")
+    session_uuid = session.get("session_uuid")
+    logged_in = session.get("logged_in", False)
+    
+    if not user_id or not session_uuid or not logged_in:
+        return False
+    
+    user = get_user_by_id(user_id)
+    if not user or session_uuid != user["active_session_uuid"]:
+        return False
+    
+    return True
+
+# helper function to handle unauthorized socket access
+def handle_socket_unauthorized():
+    end_user_session()
+    emit("force_logout")
+
+# decorator to require socket authentication
+def socket_authenticated(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not is_socket_authenticated():
+            handle_socket_unauthorized()
+            return
+        return f(*args, **kwargs)
+    return wrapper
 
 # decorator that checks if a users session exists and sends to login page if it doesnt
 def require_single_session(f):

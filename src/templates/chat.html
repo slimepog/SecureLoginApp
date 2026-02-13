@@ -42,8 +42,7 @@
             if (!content) return;
 
             socket.emit("message", { 
-                content: content,
-                sender_id: sender_id
+                content: content
             });
 
             document.getElementById("message-input").value = "";

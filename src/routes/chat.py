@@ -1,11 +1,10 @@
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask import session, Blueprint, flash, request, session
+from flask_socketio import SocketIO, emit, join_room, leave_room, disconnect
+from flask import session, Blueprint, flash, request
 from app import sockio, limiter
 from models.message import send_message
 from utils.validators import validate_content
 from models.user import get_user_by_id
-from utils.sessions import require_single_session
-
+from utils.sessions import socket_authenticated
 # sets the bp for all chat routes
 chat_bp = Blueprint("messages", __name__)
 
@@ -16,7 +15,8 @@ online_users = {}
 
 # handles initial connection to the socket
 @sockio.on("connect")
-def handle_connect():
+@socket_authenticated
+def handle_connect(data=None):
     print("Connection established: ", request.sid)
 
 # handles socket closing + removes user from online users
@@ -35,15 +35,16 @@ def handle_disconnect():
 
 # handles joining the chat
 @sockio.on("join")
-def handle_join(data):
-
-    username = data.get("username")
+@socket_authenticated
+def handle_join(data=None):
+    username = session.get("username")
     online_users[username] = request.sid
 
     emit("system", {"msg": f"🟢 {username} joined the chat"}, broadcast=True)  
 
 # handles messages (in main chat - I think)
 @sockio.on("message")
+@socket_authenticated
 def handle_message(data):
 
     try: 
@@ -51,8 +52,11 @@ def handle_message(data):
     except Exception as e:
         flash(str(e), "error")
         return
+    
+    sender_id = session.get("user_id")
+    data['sender_id'] = sender_id
     send_message(data) # saves the message
-    sender = get_user_by_id(data["sender_id"])
+    sender = get_user_by_id(sender_id)
 
     sender_username = sender["username"]
     data_sent = {"sender": sender_username,    "content": data['content']}
@@ -60,6 +64,7 @@ def handle_message(data):
 
 # handles private messages - (not in use now)
 @sockio.on("private_message")
+@socket_authenticated
 def handle_pm(data):
     target = data.get("to")
     emit("private_chat", data, room=target)
