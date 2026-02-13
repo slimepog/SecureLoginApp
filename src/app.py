@@ -30,6 +30,7 @@ def create_app():
         "https://cdn.socket.io/4.7.5/socket.io.min.js",
         # nonce will be injected automatically by Talisman
     ],
+    'connect-src': ["'self'", "https://cdn.socket.io"],  # allows websocket + source maps
     'style-src': ["'self'"],
     'img-src': ["'self'", "data:"],
     'object-src': "'none'",
