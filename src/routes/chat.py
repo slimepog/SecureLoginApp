@@ -29,7 +29,7 @@ def handle_disconnect():
         if value == sid:
             username = key
             break
-
+    # escapes username (front end comaptible shit)
     if username:
         escaped_username = escape(username)
         emit("system", {"msg": f"🔴 {escaped_username} left the chat"}, broadcast=True)
@@ -40,8 +40,10 @@ def handle_disconnect():
 @sockio.on("join")
 @socket_authenticated
 def handle_join(data=None):
-    username = session.get("username")
+    username= session.get("username")
     online_users[username] = request.sid
+
+    #  escapes username (front end comaptible shit)
     escaped_username = escape(username)
     emit("system", {"msg": f"🟢 {escaped_username} joined the chat"}, broadcast=True)  
 
@@ -62,7 +64,7 @@ def handle_message(data):
     sender = get_user_by_id(sender_id)
 
     sender_username = sender["username"]
-    # Escape the content to prevent XSS attacks
+    # escapes content (should prevent most xss hopefully + some front end comaptible shiii)
     escaped_content = escape(data['content'])
     data_sent = {"sender": sender_username, "content": escaped_content}
     emit("chat", data_sent, broadcast=True)
