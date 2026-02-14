@@ -8,7 +8,7 @@ class Config:
     
 
     # db stuff
-    DB_PATH = "../data/general.db"
+    DB_PATH = "data/general.db"
     
     # cookies stuff and protocols
     SESSION_COOKIE_HTTPONLY = True
@@ -45,7 +45,7 @@ class Config:
     # ----NOTE----
     # fix the console error regarding socketio script
     # ----NOTE----
-    # CSP Policy
+    # csp stuff
     CSP_POLICY = {
     'default-src': "'self'",
     'script-src': [
